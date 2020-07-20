@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Diary</string>
+    <string name="title_home">메모하는 습관</string>
+    <string name="title_dashboard">시간관리하는 습관</string>
+    <string name="title_notifications">설정하는 습관</string>
+    <string name="kakao_app_key">88598126db4e9c4d09a2c4d8a354288f</string>
+</resources>

@@ -1,0 +1,93 @@
+package edu.skku.map.diary.ui.dashboard;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+
+import edu.skku.map.diary.MainActivity;
+import edu.skku.map.diary.R;
+
+import static android.content.Context.MODE_PRIVATE;
+
+public class AlarmReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent notificationIntent = new Intent(context, DashboardFragment.class);
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent pendingI = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default");
+
+
+        //OREO API 26 이상에서는 채널 필요
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+            builder.setSmallIcon(R.drawable.ic_launcher_foreground); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
+
+
+            String channelName ="매일 알람 채널";
+            String description = "매일 정해진 시간에 알람합니다.";
+            int importance = NotificationManager.IMPORTANCE_HIGH; //소리와 알림메시지를 같이 보여줌
+
+            NotificationChannel channel = new NotificationChannel("default", channelName, importance);
+            channel.setDescription(description);
+
+            if (notificationManager != null) {
+                // 노티피케이션 채널을 시스템에 등록
+                notificationManager.createNotificationChannel(channel);
+            }
+        }else builder.setSmallIcon(R.mipmap.ic_launcher); // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
+
+
+        builder.setAutoCancel(true)
+                .setSmallIcon(R.drawable.main_icon)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setTicker("{Time to watch some cool stuff!}")
+                .setContentTitle("Diary")
+                .setContentText("메모를 할 시간이에요!!")
+                .setContentInfo("INFO")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingI);
+
+
+        if (notificationManager != null) {
+
+            notificationManager.notify(1234, builder.build());
+
+            Calendar nextNotifyTime = Calendar.getInstance();
+            nextNotifyTime.add(Calendar.DATE, 1);
+
+
+            SharedPreferences.Editor editor = context.getSharedPreferences("daily alarm", MODE_PRIVATE).edit();
+            editor.putLong("nextNotifyTime", nextNotifyTime.getTimeInMillis());
+            editor.apply();
+
+            Date currentDateTime = nextNotifyTime.getTime();
+            String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
+            Toast.makeText(context.getApplicationContext(),"다음 알람은 " + date_text + "에 울립니다!", Toast.LENGTH_SHORT).show();
+        }
+    }
+}

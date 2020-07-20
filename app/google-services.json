@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "870279644384",
+    "firebase_url": "https://life-cca3f.firebaseio.com",
+    "project_id": "life-cca3f",
+    "storage_bucket": "life-cca3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870279644384:android:f2dfd157e6e07f85767c85",
+        "android_client_info": {
+          "package_name": "edu.skku.map.diary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870279644384-ispq3ci4em53n8kihhc8d96v9ci3kcsv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClidEJvaTfpyURjY2KsbQm5jgq8xMtfZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870279644384-ispq3ci4em53n8kihhc8d96v9ci3kcsv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
